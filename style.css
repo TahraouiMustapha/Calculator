@@ -3,6 +3,7 @@
 *{
     margin: 0;  
     font-family: "Roboto", sans-serif; 
+    box-sizing: border-box;
 }
 
 body{
@@ -20,6 +21,8 @@ body{
     height:60vh;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
+    border-radius: 8px;
 }
 
 .screen{
@@ -28,7 +31,6 @@ body{
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    border-radius: 8px 8px 0 0;
     font-size: 32px;
     padding:0 8px;
     /* extra for now */
@@ -39,27 +41,52 @@ body{
     flex-grow: 1;
     display: flex;
     flex-direction: column;
+    
+}
+/* for all buttons */
+.button {
+    border: 0.5px solid #ebeaea;
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    color: #ebeaea;
+    font-size: 32px; 
+    font-weight: 400;  
+    cursor: pointer;
 }
 
 .main .signs {
     display: flex;
     height: calc(100% / 5);
     flex-shrink: 0;
-    /* extra */
-    background-color: red;
+    background-color: #444;
 }
 .signs .button {
-    width:calc(100% / 4);
+    width:25%;
 }
 
-.button {
-    border: 1px solid #333;
+.digitsContainer {
+    flex:1;
     display: flex;
-    justify-content: center;
-    align-items: center; 
-    color: #ebeaea;
-    font-size: 24px;   
+    background-color: #a7a4a4;
 }
+
+.digits {
+    flex:1;
+    display: flex;
+    flex-wrap: wrap;
+}
+.digits .button{
+    width:calc(100% / 3);
+    color:white;
+}
+
+.button.equal {
+    width:25%;
+    background-color:#bf2b06;
+    border-bottom-right-radius: 10px;
+}
+
 
 
 
