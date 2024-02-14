@@ -36,3 +36,26 @@ function operate(fisrt, op, last ) {
     }
 }
 
+//function populate the display number buttons 
+const screen = document.querySelector('.screen');
+
+const allButtons =  Array.from(document.querySelectorAll(".button"));
+const populateBtns = allButtons.filter((btn) => 
+    btn.innerText !== "=" && btn.innerText !== "AC" 
+);
+
+let displayVal;
+
+
+populateBtns.forEach((btn) => {
+    btn.addEventListener('click',(e) => {
+        screen.innerText += e.target.innerText; 
+        displayVal = screen.innerText;  
+    })
+});
+
+
+
+
+
+
