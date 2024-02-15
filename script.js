@@ -53,7 +53,23 @@ populateBtns.forEach((btn) => {
         displayVal = screen.innerText;  
     })
 });
+//operate on the two numbers when '=' clicked
+const equal = document.querySelector('.equal');
+equal.addEventListener('click', ()=>{
+    let indexOp = findIndexOperator(displayVal);
 
+    let firstNmb = displayVal.split('').slice(0, indexOp ).join('');
+    let secondNmb = displayVal.split('').slice(indexOp+1).join('');
+});
+
+
+function findIndexOperator (string) {
+    let operators = ['+','-','*','/'];
+    for (let op of operators) {
+        if (string.includes(op)) return string.indexOf(op) ;
+    }
+    return -1;
+}
 
 
 
