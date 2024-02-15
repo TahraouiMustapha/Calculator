@@ -20,19 +20,13 @@ function divide(a, b) {
 function operate(fisrt, op, last ) {
     switch (op) {
         case "+":
-            console.log(add(fisrt, last));
-            break;
+            return add(fisrt, last);
         case "-":
-            console.log(subtract(fisrt, last));
-            break;
+            return subtract(fisrt, last);
         case "*":
-            console.log(multiply(fisrt, last));
-            break;
+            return multiply(fisrt, last);
         case "/":
-            console.log(divide(fisrt, last));
-            break;            
-        default:
-            console.log("another try!");
+            return divide(fisrt, last);           
     }
 }
 
@@ -44,8 +38,9 @@ const populateBtns = allButtons.filter((btn) =>
     btn.innerText !== "=" && btn.innerText !== "AC" 
 );
 
-let displayVal;
 
+let displayVal;
+// const digits = Array.from(document.querySelectorAll('.button.digit'));
 
 populateBtns.forEach((btn) => {
     btn.addEventListener('click',(e) => {
@@ -58,16 +53,17 @@ const equal = document.querySelector('.equal');
 const operators = ['+','-','*','/'];
 
 equal.addEventListener('click', ()=>{
-    let indexOp = findFirstIndexOp(Array.from(displayVal));
-    console.log(Array.from(displayVal));
-
-    // let firstNmb = displayVal.split('').slice(0, indexOp ).join('');
-    // let secondNmb = displayVal.split('').slice(indexOp+1).join('');
-
+    let newArray = Array.from(displayVal);
+    let indexOp = findFirstIndexOp(newArray);
+    
+    let firstNmb = parseFloat(displayVal.slice(0, indexOp));
+    let secondNmb = parseFloat(displayVal.slice(indexOp+1));
+    screen.innerText = operate(firstNmb, newArray[indexOp], secondNmb);
 });
 
 function findFirstIndexOp (array) {
     return array.findIndex((op) => operators.includes(op));
+
 }
 
 
