@@ -1,5 +1,3 @@
-let firstNmb = 0, op = '', secondNmb = 0;
-
 function add(a, b) {
     return a + b;
 }
@@ -13,31 +11,40 @@ function multiply(a, b) {
 }
 
 function divide(a, b) {
+    if (b === 0) {
+        alert("Cannot divide by zero!");
+        return NaN;
+    }
     return a / b;
 }
 
-function operate(fisrt, op, last ) {
+function operate(first, op, last) {
     switch (op) {
         case "+":
-            return add(fisrt, last);
+            return add(first, last);
         case "-":
-            return subtract(fisrt, last);
+            return subtract(first, last);
         case "*":
-            return multiply(fisrt, last);
+            return multiply(first, last);
         case "/":
-            return divide(fisrt, last);           
+            return divide(first, last);
     }
 }
+
+const operatorsBtns = document.querySelectorAll('.signs .button');
+
+let firstNmb = 0, op = '', secondNmb = 0;
 
 //for populate the display
 const screen = document.querySelector('.screen');
 const numbersBtns = document.querySelectorAll('.button.digit');
-let displayVal;
+let displayVal = '';
 let opIsclicked = 0;
+
 function populateDisplay(button) {
-    if(opIsclicked) {
+    if (opIsclicked) {
         screen.innerText = '';
-        opIsclicked = 0; 
+        opIsclicked = 0;
     }
     screen.innerText += button.innerText;
     displayVal = screen.innerText;
@@ -46,41 +53,39 @@ function populateDisplay(button) {
 numbersBtns.forEach((btn) => {
     btn.addEventListener('click', (e) => {
         populateDisplay(e.target);
-        
     });
 });
 
 //get all operators buttons
-const operatorsBtns = document.querySelectorAll('.signs .button');
 function setToDefault() {
     operatorsBtns.forEach((btn) => {
         btn.style.backgroundColor = '';
-    })
+    });
 }
+
 operatorsBtns.forEach((btn) => {
     btn.addEventListener('click', (e) => {
         setToDefault();
-        e.target.style = "background-color:#bf2bbb;";
+        e.target.style.backgroundColor = '#bf2bbb';
         firstNmb = parseFloat(displayVal);
         op = e.target.innerText;
-
         opIsclicked = 1;
-    })
-})
+    });
+});
 
-//get equal butt
+//get equal button
 const equal = document.querySelector('.equal');
-
 equal.addEventListener('click', () => {
-//store the scnNmb from displayVal after check if op si clicked
     setToDefault();
-    if(op) {
+    if (op) {
         secondNmb = parseFloat(displayVal);
         let result = operate(firstNmb, op, secondNmb);
         screen.innerText = result;
 
+        firstNmb = result;
         op = '';
         secondNmb = 0;
+        displayVal = result.toString(); // Convert the result to a string for potential further calculations
     }
-
 });
+
