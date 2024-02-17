@@ -1,3 +1,4 @@
+let firstNmb = 0, op = '', secondNmb = 0;
 
 function add(a, b) {
     return a + b;
@@ -28,64 +29,58 @@ function operate(fisrt, op, last ) {
     }
 }
 
-//function populate the display number buttons 
+//for populate the display
 const screen = document.querySelector('.screen');
-
-let displayVal ;
-const digitsBtns = document.querySelectorAll('.button.digit');
-//function for populate the display
-function populateDisplay (numberBtn) {
-    screen.innerText += numberBtn.innerText;
-    displayVal = screen.innerText; 
+const numbersBtns = document.querySelectorAll('.button.digit');
+let displayVal;
+let opIsclicked = 0;
+function populateDisplay(button) {
+    if(opIsclicked) {
+        screen.innerText = '';
+        opIsclicked = 0; 
+    }
+    screen.innerText += button.innerText;
+    displayVal = screen.innerText;
 }
 
-digitsBtns.forEach((btn) => {
+numbersBtns.forEach((btn) => {
     btn.addEventListener('click', (e) => {
-        if (opIsClicked) {
-            screen.innerText = '';
-            opIsClicked = 0;
-        }
         populateDisplay(e.target);
-
+        
     });
-})
+});
 
-//for clear button
-const clear = document.querySelector('.button.clear');
-clear.onclick = () => {
-    screen.innerText = '';
-} 
-
-//for operators buttons
+//get all operators buttons
 const operatorsBtns = document.querySelectorAll('.signs .button');
-let firstNmb;
-let op;
-let opIsClicked ;
+function setToDefault() {
+    operatorsBtns.forEach((btn) => {
+        btn.style.backgroundColor = '';
+    })
+}
 operatorsBtns.forEach((btn) => {
     btn.addEventListener('click', (e) => {
-        if (opIsClicked) {
-            op.style = "background-color:#444;";
-            let result = operate(firstNmb, op.innerText, parseFloat(displayVal));
-            displayVal = result;
-            screen.innerText = result;
-            opIsClicked = 0;
-        } else {
-            e.target.style = "background-color:#666;";
-            firstNmb = parseFloat(displayVal);
-            op = e.target;
-            opIsClicked = 1;
-        }
-       
+        setToDefault();
+        e.target.style = "background-color:#bf2bbb;";
+        firstNmb = parseFloat(displayVal);
+        op = e.target.innerText;
 
+        opIsclicked = 1;
     })
 })
 
-//for equal button
+//get equal butt
 const equal = document.querySelector('.equal');
-equal.onclick = () => {
-    op.style = "background-color:#444;";
-    let result = operate(firstNmb, op.innerText, parseFloat(displayVal));
-    displayVal = result;
-    screen.innerText = result;
-    opIsClicked = 0;
-}
+
+equal.addEventListener('click', () => {
+//store the scnNmb from displayVal after check if op si clicked
+    setToDefault();
+    if(op) {
+        secondNmb = parseFloat(displayVal);
+        let result = operate(firstNmb, op, secondNmb);
+        screen.innerText = result;
+
+        op = '';
+        secondNmb = 0;
+    }
+
+});
