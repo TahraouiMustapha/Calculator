@@ -85,7 +85,7 @@ equal.addEventListener('click', () => {
         firstNmb = result;
         op = '';
         secondNmb = 0;
-        displayVal = result.toString(); // Convert the result to a string for potential further calculations
+        displayVal = result.toString(); 
     }
 });
 
