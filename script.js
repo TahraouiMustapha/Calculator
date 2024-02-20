@@ -1,91 +1,91 @@
-function add(a, b) {
-    return a + b;
-}
+// let firstNmb = '';let secondNmb = '';
+let operator = '';
+let previousVal = '';
+let currentVal = '';
 
-function subtract(a, b) {
-    return a - b;
-}
+// let displayVal = '';
 
-function multiply(a, b) {
-    return a * b;
-}
+document.addEventListener("DOMContentLoaded", () => {
+    let clear = document.querySelector('.clear');
+    let equal = document.querySelector('.equal');
+    let point = document.querySelector('.point');
 
-function divide(a, b) {
-    if (b === 0) {
-        alert("Cannot divide by zero!");
-        return NaN;
+    const numbers = document.querySelectorAll('.number');
+    const operators = document.querySelectorAll('.operator');
+
+    const screen = document.querySelector('.screen');
+
+    numbers.forEach((num) => {
+        num.addEventListener('click', (e) => {
+            handleNumbers(e.target.textContent);
+            screen.innerText = currentVal;
+        })
+    })
+
+    operators.forEach((op) => {
+        op.addEventListener('click', (e) => {
+            hundleOperators(e.target.textContent);
+            screen.innerText = '';
+        })
+    })
+
+    clear.addEventListener('click', () => {
+        screen.innerText = '0';
+        currentVal = '';
+        previousVal = '';
+        operator = '';
+    });
+
+    equal.addEventListener('click', () => {
+        operate();
+
+        if (previousVal.length <= 10) {
+            screen.innerText = previousVal;
+        } else {
+            screen.innerText = previousVal.slice(0, 10) + "...";
+        }
+    });
+
+});
+
+function handleNumbers(num) {
+    if (currentVal.length <= 10) {
+        currentVal += num;
     }
-    return a / b;
 }
 
-function operate(first, op, last) {
-    switch (op) {
+function hundleOperators(op) {
+    operator = op;
+    previousVal = currentVal;
+    currentVal = '';
+}
+
+function operate() {
+    previousVal= Number(previousVal);
+    currentVal = Number(currentVal);
+
+    switch (operator) {
         case "+":
-            return add(first, last);
+            previousVal += currentVal;
+            break;
         case "-":
-            return subtract(first, last);
-        case "*":
-            return multiply(first, last);
+            previousVal -= currentVal;
+            break;
+
+        case "x":
+            previousVal *= currentVal;
+            break;
+
         case "/":
-            return divide(first, last);
+            if (currentVal === 0) return "error can not divide";
+            previousVal /= currentVal;
+            break;
     }
+    previousVal = roundNumber(previousVal);
+    previousVal = previousVal.toString();
+    currentVal = currentVal.toString(); 
 }
 
-const operatorsBtns = document.querySelectorAll('.signs .button');
-
-let firstNmb = 0, op = '', secondNmb = 0;
-
-//for populate the display
-const screen = document.querySelector('.screen');
-const numbersBtns = document.querySelectorAll('.button.digit');
-let displayVal = '';
-let opIsclicked = 0;
-
-function populateDisplay(button) {
-    if (opIsclicked) {
-        screen.innerText = '';
-        opIsclicked = 0;
-    }
-    screen.innerText += button.innerText;
-    displayVal = screen.innerText;
+function roundNumber(num) {
+    return Math.round(num * 100000) / 100000;
 }
-
-numbersBtns.forEach((btn) => {
-    btn.addEventListener('click', (e) => {
-        populateDisplay(e.target);
-    });
-});
-
-//get all operators buttons
-function setToDefault() {
-    operatorsBtns.forEach((btn) => {
-        btn.style.backgroundColor = '';
-    });
-}
-
-operatorsBtns.forEach((btn) => {
-    btn.addEventListener('click', (e) => {
-        setToDefault();
-        e.target.style.backgroundColor = '#bf2bbb';
-        firstNmb = parseFloat(displayVal);
-        op = e.target.innerText;
-        opIsclicked = 1;
-    });
-});
-
-//get equal button
-const equal = document.querySelector('.equal');
-equal.addEventListener('click', () => {
-    setToDefault();
-    if (op) {
-        secondNmb = parseFloat(displayVal);
-        let result = operate(firstNmb, op, secondNmb);
-        screen.innerText = result;
-
-        firstNmb = result;
-        op = '';
-        secondNmb = 0;
-        displayVal = result.toString(); 
-    }
-});
-
