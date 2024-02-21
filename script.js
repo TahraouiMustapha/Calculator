@@ -1,91 +1,214 @@
-// let firstNmb = '';let secondNmb = '';
+let firstNmb = '';
 let operator = '';
-let previousVal = '';
-let currentVal = '';
+let secondOperator = '';
+let secondNmb = '';
 
-// let displayVal = '';
+let result = null;
+let displayValue = '0';
+let screen = document.querySelector('.screen');
 
-document.addEventListener("DOMContentLoaded", () => {
-    let clear = document.querySelector('.clear');
-    let equal = document.querySelector('.equal');
-    let point = document.querySelector('.point');
+window.addEventListener('keydown', (e) => {
+    e.key 
+});
 
+document.addEventListener('DOMContentLoaded', () => {
     const numbers = document.querySelectorAll('.number');
-    const operators = document.querySelectorAll('.operator');
-
-    const screen = document.querySelector('.screen');
-
     numbers.forEach((num) => {
         num.addEventListener('click', (e) => {
             handleNumbers(e.target.textContent);
-            screen.innerText = currentVal;
+            updateDisplay();
         })
     })
 
+    const operators = document.querySelectorAll('.operator');
     operators.forEach((op) => {
         op.addEventListener('click', (e) => {
-            hundleOperators(e.target.textContent);
-            screen.innerText = '';
-        })
+            handleOperators(e.target.innerText);
+            updateDisplay();
+        });
+    });
+
+    const equal = document.querySelector('.equal');
+    equal.addEventListener('click', () => {
+        handleEquals();
+        updateDisplay();
+    });
+
+    const clear = document.querySelector('.clear');
+    clear.addEventListener('click', () => {
+        handleCLear();
+        updateDisplay();
     })
 
-    clear.addEventListener('click', () => {
-        screen.innerText = '0';
-        currentVal = '';
-        previousVal = '';
-        operator = '';
+    const dot = document.querySelector('.dot');
+    dot.addEventListener('click', () => {
+        inputDecimal();
+        updateDisplay();
     });
 
-    equal.addEventListener('click', () => {
-        operate();
-
-        if (previousVal.length <= 10) {
-            screen.innerText = previousVal;
-        } else {
-            screen.innerText = previousVal.slice(0, 10) + "...";
-        }
+    const backspace = document.querySelector('.backspace');
+    backspace.addEventListener('click', () => {
+        handleBackspace();
+        updateDisplay();
     });
-
 });
 
-function handleNumbers(num) {
-    if (currentVal.length <= 10) {
-        currentVal += num;
+updateDisplay();
+
+function updateDisplay() {
+    screen.innerText = displayValue;
+    if(displayValue.length > 9) {
+        screen.innerText = displayValue.slice(0, 9);
     }
 }
 
-function hundleOperators(op) {
-    operator = op;
-    previousVal = currentVal;
-    currentVal = '';
+function handleNumbers (num) {
+    if(operator === '') {
+        if(displayValue === '0') {
+            displayValue = num;
+        } else if (displayValue === firstNmb) {
+            displayValue = num;
+        } else {
+            displayValue += num;
+        }
+    } else {
+        if(displayValue === firstNmb) displayValue = num;
+        else displayValue += num;
+    }
 }
 
-function operate() {
-    previousVal= Number(previousVal);
-    currentVal = Number(currentVal);
+function handleEquals () {
+   
+    if(firstNmb === '') {
+        displayValue = displayValue;
+    } else if (secondOperator != '') {
+        secondNmb = displayValue;
+        result = operate(firstNmb, secondOperator, secondNmb);
+        if (result != "error") {
+            firstNmb = result;
+            displayValue = roundNumber(result);
+            secondNmb = '';
+            operator = '';
+            secondOperator = '';
+            result = null;
+        } else {
+            displayValue = result;
+        }
 
-    switch (operator) {
+    } else {
+        secondNmb = displayValue;
+        result = operate( firstNmb, operator, secondNmb);
+        if (result != "error") {
+            firstNmb = result;
+            displayValue =  roundNumber(result) ;
+            result = null
+            secondNmb = '';
+            operator = '';
+            secondOperator = '';
+        } else {
+            displayValue = result;
+        }
+    }
+}
+
+
+function handleOperators(op) {
+    if (operator != '' && secondOperator === '') {
+        secondOperator = op;
+        secondNmb = displayValue;
+        result = operate(firstNmb, operator, secondNmb);
+        if(result != "error") {
+            firstNmb = result;
+            displayValue =   roundNumber(result) ;
+            result = null;
+        } else {
+            displayValue = result;
+        }
+
+    } else if (operator != '' && secondOperator != '') {
+        secondNmb = displayValue;
+        result = operate(firstNmb, secondOperator, secondNmb);
+        if(result != "error") {
+            secondOperator = op;
+            displayValue =   roundNumber(result) ;
+            firstNmb = displayValue;
+            result = null;
+        } else {
+            displayValue = result;
+        }
+
+    } else {
+        operator = op;
+        firstNmb = displayValue;
+    }
+
+}
+
+function handleCLear() {
+    displayValue = '0';
+    firstNmb = '';
+    secondNmb = '';
+    operator = '';
+    secondOperator = '';
+    result = null;
+}
+
+function inputDecimal() {
+    if (!displayValue.includes('.')) {
+        displayValue += ".";
+    }
+}
+
+function handleBackspace() {
+    if(displayValue.length === 1 ) {
+        displayValue = '0';
+    } else if (displayValue != '0'){
+        displayValue = displayValue.slice(0, -1);
+    }
+}
+
+//operators functions
+function add(first, second) {
+    return first + second;
+}
+
+function subtract(first, second) {
+    return first - second;
+}
+
+function multiply(first, second) {
+    return first * second;
+}
+
+function divide(first, second) {
+    return first / second;
+}
+
+function operate(first, op, second) {
+    first = Number(first);
+    second = Number(second);
+
+    switch (op) {
         case "+":
-            previousVal += currentVal;
+            result = add(first, second);
             break;
         case "-":
-            previousVal -= currentVal;
+            result =  subtract(first, second);
             break;
-
         case "x":
-            previousVal *= currentVal;
+            result = multiply(first, second);
             break;
-
         case "/":
-            if (currentVal === 0) return "error can not divide";
-            previousVal /= currentVal;
+            if (second === 0) return "error";
+            result = divide(first, second);
             break;
     }
-    previousVal = roundNumber(previousVal);
-    previousVal = previousVal.toString();
-    currentVal = currentVal.toString(); 
+    return result.toString();
 }
 
 function roundNumber(num) {
-    return Math.round(num * 100000) / 100000;
+    num = Number(num);
+    num = Math.round(num * 10000) / 10000;
+    return num.toString();
 }
+
