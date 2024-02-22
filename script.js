@@ -7,9 +7,6 @@ let result = null;
 let displayValue = '0';
 let screen = document.querySelector('.screen');
 
-window.addEventListener('keydown', (e) => {
-    e.key 
-});
 
 document.addEventListener('DOMContentLoaded', () => {
     const numbers = document.querySelectorAll('.number');

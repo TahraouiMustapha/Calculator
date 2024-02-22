@@ -15,7 +15,7 @@ body{
 }
 
 .calculator{
-    width: 40%;
+    width: 370px;
     height: 60vh;
     display: flex;
     flex-direction: column;   
@@ -30,7 +30,7 @@ body{
 .first-row {
     display: flex;
     justify-content: space-between;
-    padding: 0 40px;
+    padding: 0 16px;
 }
 
 .screen {
